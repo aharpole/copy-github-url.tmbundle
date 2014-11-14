@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -U
+
+# https://github.com/Fullscreen/Gorilla.git
+# git@github.com:Fullscreen/Gorilla.git
+def repo_name_from_remote_url(remote_url)
+  org = remote_url.split('/')[-2]
+  repo = remote_url.split('/')[-1][0..-6]
+  "#{org}/#{repo}".split(':').last
+end
+
+Dir.chdir ENV['TM_PROJECT_DIRECTORY']
+branch = `git rev-parse --abbrev-ref HEAD`.rstrip
+relative_path = ENV['TM_FILEPATH'].split(ENV['TM_PROJECT_DIRECTORY'])[1]
+repo = repo_name_from_remote_url `git config --get remote.origin.url`
+line = ENV['TM_LINE_NUMBER']
+url = "https://github.com/#{repo}/tree/#{branch}#{relative_path}#L#{line}"
+`echo #{url} | pbcopy`
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>name</key>
+	<string>Copy GitHub link</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>text</string>
+	<key>outputLocation</key>
+	<string>discard</string>
+	<key>uuid</key>
+	<string>74E0983C-937C-4791-82EB-06D1F2585E7D</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>
