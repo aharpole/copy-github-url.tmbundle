@@ -11,8 +11,9 @@
 # git@github.com:Fullscreen/Gorilla.git
 def repo_name_from_remote_url(remote_url)
   org = remote_url.split('/')[-2]
-  repo = remote_url.split('/')[-1][0..-6]
-  "#{org}/#{repo}".split(':').last
+  repo = remote_url.rstrip.split('/')[-1]
+  repo = repo[0..-5] if repo.end_with? ".git"
+  "#{org}/#{repo}".split(':').last.rstrip
 end
 
 Dir.chdir ENV['TM_PROJECT_DIRECTORY']
